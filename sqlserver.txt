@@ -1,0 +1,1381 @@
+/* 
+
+Constraints : 
+
+=> Constraints is a set of rules  
+
+=> Primary key : 
+
+=> It will not allow null values and duplicate values 
+
+=>It is used to build relationship between the tables 
+
+=>Foreign Key 
+
+=> It refers the values from primary key column 
+
+=>It will accept null values and duplicate values  
+
+=>Check 
+
+=>It works based on the business rules 
+
+=>Not Null 
+
+=>It will not accept null values but will accept  
+
+duplicate values 
+
+=>Unique 
+
+=>It will not accept duplicate values but will accept  
+
+one null value 
+
+=>Default 
+
+=>Instead of null value default value will be updated  
+
+*/ 
+
+  
+
+/* 
+
+Employee table 
+
+Empid - Varchar(10) - Primary key 
+
+Empname - varchar(100) - Not null 
+
+Location - varchar(100) - default  
+
+mailid - varchar(100) - unique 
+
+dept_id - varchar(10) - foreign key 
+
+salary - int - check  
+
+  
+
+Department Table  
+
+deptid - varchar(10) - primary key 
+
+deptname - varchar(50) - Not null 
+
+*/ 
+
+  
+
+create table department(deptid varchar(10) primary key, 
+
+deptname varchar(50) not null); 
+
+  
+
+create table Employee(Empid varchar(10),Empname varchar(100) 
+
+not null,EmpLoc varchar(100) default 'India',mailid  
+
+varchar(100) unique,dept_id varchar(10),salary int, 
+
+primary key(Empid), 
+
+foreign key(dept_id) references department(deptid), 
+
+check(salary > 0)); 
+
+  
+
+insert into department(deptid,deptname) values 
+
+('D01','Admin'); 
+
+  
+
+insert into department(deptid,deptname) values 
+
+('D02','Marketing'),('D03','Sales'),('D04','HR'), 
+
+('D05','Insurance'); 
+
+  
+
+select * from department; 
+
+  
+
+insert into Employee(Empid,Empname,EmpLoc,mailid,salary,dept_id) 
+
+values('E101','Anu','Chennai','anu@hcl.com',10000,'D01'); 
+
+  
+
+insert into Employee(Empid,Empname,EmpLoc,mailid,salary,dept_id) 
+
+values('E104','Sita','Chennai','sita@hcl.com',10000,'D01'), 
+
+('E102','Ram','Noida','ram@hcl.com',100000,'D03'), 
+
+('E103','Siva','Bangalore','siva@hcl.com',60000,'D02'); 
+
+-- Check Unique 
+
+insert into Employee(Empid,Empname,EmpLoc,mailid,salary,dept_id) 
+
+values('E105','Anu','Chennai','anu@hcl.com',10000,'D01'); 
+
+-- Not Null 
+
+insert into Employee(Empid,EmpLoc,mailid,salary,dept_id) 
+
+values('E105','Chennai','anu1@hcl.com',10000,'D01'); 
+
+-- Default 
+
+insert into Employee(Empid,Empname,mailid,salary,dept_id) 
+
+values('E105','Anu','anu1@hcl.com',10000,'D01'); 
+
+-- Check constraint 
+
+insert into Employee(Empid,Empname,EmpLoc,mailid,salary,dept_id) 
+
+values('E106','Anu','Chennai','anu2@hcl.com',-10000,'D01'); 
+
+--Foreign key 
+
+insert into Employee(Empid,Empname,EmpLoc,mailid,salary,dept_id) 
+
+values('E106','Anu','Chennai','anu2@hcl.com',10000,'D10'); 
+
+  
+
+select * from Employee; 
+
+  
+
+-- Copy of table 
+
+  
+
+SELECT empid,dept_id into empdept from 
+
+Employee; 
+
+  
+
+select * from empdept; 
+
+  
+
+create table deptnew(deptid varchar(10),deptname varchar(100)); 
+
+insert into deptnew select deptid,deptname from 
+
+department ; 
+
+  
+
+select * from deptnew; 
+
+ 
+
+select * from deptnew; 
+
+  
+
+sp_help deptnew; 
+
+  
+
+alter table deptnew alter column deptname varchar(200)  
+
+not null; 
+
+  
+
+alter table deptnew alter column deptid varchar(20)  
+
+not null; 
+
+  
+
+alter table deptnew add constraint dept_primary 
+
+primary key(deptid); 
+
+  
+
+alter table deptnew add deptloc varchar(100) 
+
+-- update all the rows 
+
+update deptnew set deptloc='Chennai'; 
+
+-- update rows with condition 
+
+update deptnew set deptloc='Noida' where deptname='HR'; 
+
+--To remove row data 
+
+delete from deptnew where deptid='D01'; 
+
+  
+
+--To remove all rows : 
+
+truncate table deptnew 
+
+  
+
+--TCL  
+
+begin transaction tran1; 
+
+truncate table deptnew; 
+
+  
+
+rollback transaction tran1; 
+
+  
+
+begin transaction tran1; 
+
+delete from deptnew; 
+
+  
+
+begin transaction tran1; 
+
+drop table deptnew; 
+
+------------------------------------------------------------------------------------------------------------ 
+
+Operators : 
+
+-------------- 
+
+=>Arithmetic Operators  
+
+=> Manipulation between the columns 
+
+=> +,-,*,/,% 
+
+=>Logical Operators  
+
+=> It checks the condition and return whether it is true /False  
+
+=>AND – Both the condition needs to be true 
+
+=>OR – Either one condition needs to be true 
+
+=>NOT – Negation of true/False  
+
+=> in – Check multiple values and returns true /False 
+
+=>Not in – Exclude the values 
+
+=>Between – range of values 
+
+=>Not Between – not in the range 
+
+=>Like – Check the availability of string data 
+
+=>Wildcard Operators  
+
+=> _ – underscore which holds single character 
+
+=>% - Percentage which hold more than one character 
+
+=>Not Like – Exclude the string value 
+
+=>Some – few values needs to be available in subquery 
+
+=>ALL – all the values needs to be in subquery 
+
+=>Any – Either one value needs to be in subquery 
+
+=>Comparison Operator  
+
+=> > - Greater than 
+
+=> >= - Greater than Equal to 
+
+=> < - Less than 
+
+=> <= - Less than Equal to 
+
+=> = - Equal to 
+
+=> != - Not Equal to 
+
+=>Assignment Operator  
+
+=> + = => a+=b==> a=a+b 
+
+=> - = => a-=b==> a=a-b 
+
+=> * = => a*=b==> a=a*b 
+
+=> / = => a/=b==> a=a/b 
+
+=> % = => a%=b==> a=a%b 
+
+select * from customers; 
+
+  
+
+select customernumber 'Cust Id',customername 'Cust Name', 
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name', 
+
+concat(addressLine1,',',city,',',postalCode) 'Address', 
+
+creditlimit 'Credit Limit', 
+
+creditlimit-(0.05*creditLimit) 'New limit', 
+
+creditlimit*creditlimit 'Max limit' 
+
+FROM customers; 
+
+  
+
+select 10+20*5; -- BODMAS (Bracket of Division,Multiplication,Addition,Subraction) 
+
+select 10/0; 
+
+select 0/10; 
+
+ 
+
+select customernumber 'Cust Id',customername 'Cust Name',  
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name',  
+
+creditlimit 'Credit Limit' 
+
+FROM customers where creditlimit > 50000;  
+
+  
+
+select customernumber 'Cust Id',customername 'Cust Name',  
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name',  
+
+creditlimit 'Credit Limit' 
+
+FROM customers where creditLimit > 0 and creditlimit < 50000 ;  
+
+  
+
+select customernumber 'Cust Id',customername 'Cust Name',  
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name',  
+
+creditlimit 'Credit Limit' 
+
+FROM customers where creditlimit =0;  
+
+  
+
+select customernumber 'Cust Id',customername 'Cust Name',  
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name',  
+
+creditlimit 'Credit Limit' 
+
+FROM customers where creditlimit !=0;  
+
+  
+
+select customernumber 'Cust Id',customername 'Cust Name',  
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name',  
+
+creditlimit 'Credit Limit' 
+
+FROM customers where creditlimit >23000 or creditlimit <50000;  
+
+  
+
+select customernumber 'Cust Id',customername 'Cust Name',  
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name',  
+
+creditlimit 'Credit Limit' 
+
+FROM customers where creditlimit between 23000 and 50000;  
+
+  
+
+select customernumber 'Cust Id',customername 'Cust Name',  
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name',  
+
+creditlimit 'Credit Limit' 
+
+FROM customers where creditlimit > 0 and 
+
+creditlimit not between 23000 and 50000;  
+
+  
+
+select * from customers; 
+
+select customernumber 'Cust Id',customername 'Cust Name',  
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name',  
+
+country 'Country',creditlimit 'Credit Limit' 
+
+FROM customers where country in('France','USA','Australia'); 
+
+  
+
+select customernumber 'Cust Id',customername 'Cust Name',  
+
+concat(contactfirstname,' ',contactlastname) 'Contact Name',  
+
+country 'Country',creditlimit 'Credit Limit' 
+
+FROM customers where country not in('France','USA','Australia'); 
+
+ 
+
+ 
+
+select * from products; 
+
+  
+
+select productcode 'Product Code',productName 'Product Name', 
+
+quantityinstock 'Quantity',quantityinstock * MSRP 'Total Price' 
+
+from products; 
+
+  
+
+select productcode 'Product Code',productName 'Product Name', 
+
+quantityinstock'Quantity',MSRP 'Price', 
+
+case  
+
+when quantityinstock between 50 and 100 then MSRP -(0.05*MSRP) 
+
+when quantityinstock > 100 and quantityinstock <3000 then MSRP-(0.03*MSRP) 
+
+else 
+
+MSRP-(0.01*MSRP)  
+
+End 
+
+'Discount Price' from Products; 
+
+-------------------------------------------------------------------------------------------------------------- 
+
+Clauses : 
+
+--------------- 
+
+=> Group by .............. Having 
+
+=>Based on the values the group is formed –  
+
+aggregate functions (Sum,count,min,max,Average) 
+
+=>In select statement either aggregate function or column in group by  
+
+=>Having clause – This will work along with group by clause  
+
+=> To filter any values using either aggregate function or group by column 
+
+-- Aggreagate function 
+
+select count(customernumber) 'No of customers', 
+
+max(creditlimit) 'Maximum Credit limit', 
+
+min(creditlimit) 'Minimum Credit Limit', 
+
+sum(creditlimit) 'Total Creditlimit', 
+
+avg(creditLimit) 'Average Limit' 
+
+from customers; 
+
+  
+
+select count(customernumber) 'No of customers', 
+
+max(creditlimit) 'Maximum Credit limit', 
+
+min(creditlimit) 'Minimum Credit Limit', 
+
+sum(creditlimit) 'Total Creditlimit', 
+
+avg(creditLimit) 'Average Limit' 
+
+from customers where creditLimit > 0; 
+
+ 
+
+/* 
+
+Execution Pattern of SELECT  
+
+from <table name> where <conditions> 
+
+Group by <columns...> having <condition > 
+
+select <columns...> 
+
+Order by <columns> asc/desc  
+
+*/ 
+
+  
+
+  
+
+select country,count(customernumber) 'No of customers', 
+
+max(creditlimit) 'Maximum Credit limit', 
+
+min(creditlimit) 'Minimum Credit Limit', 
+
+sum(creditlimit) 'Total Creditlimit', 
+
+avg(creditLimit) 'Average Limit' 
+
+from customers where creditLimit > 0 
+
+group by country; 
+
+  
+
+  
+
+select city,country,count(customernumber) 'No of customers', 
+
+max(creditlimit) 'Maximum Credit limit', 
+
+min(creditlimit) 'Minimum Credit Limit', 
+
+sum(creditlimit) 'Total Creditlimit', 
+
+avg(creditLimit) 'Average Limit' 
+
+from customers where creditLimit > 0 
+
+group by country,city order by country; 
+
+  
+
+select country,city,count(customernumber) 'No of customers', 
+
+max(creditlimit) 'Maximum Credit limit', 
+
+min(creditlimit) 'Minimum Credit Limit', 
+
+sum(creditlimit) 'Total Creditlimit', 
+
+avg(creditLimit) 'Average Limit' 
+
+from customers where creditLimit > 0  
+
+group by country,city  
+
+having count(customernumber) > 1 
+
+order by country; 
+
+=>Order by : 
+
+=> Arrangement of data either in ascending order or descending order 
+
+ 
+
+/*Scalar Functions : 
+
+=>Single input returns single output 
+
+=>Mathemetical Function 
+
+=>absolute,ceiling,floor,round,power,squareroot 
+
+=>String Functions 
+
+=>Concatenation,uppercase,lowercase,substring,right,left, 
+
+reverse,replace,Ltrim,Rtrim,format 
+
+=>Date Time Functions 
+
+date,time,smalldatetime,datetime,hour,minute,seconds,datepart, 
+
+datename,day,month,year,datediff,dateadd*/ 
+
+-- Mathematical Functions : 
+
+  
+
+select abs(-100) 'Absolute value',CEILING(23.345) 'Ceiling', 
+
+floor(23.345) 'Floor',round(23.345,2) 'Round off', 
+
+power(2,3) 'Power of',sqrt(144) 'Square root' 
+
+  
+
+-- String Functions  
+
+select customernumber 'Cust Id',  
+
+upper(customerName) 'CUSTOMER NAME',lower(customername) 'customername', 
+
+left(customername,1) 'left Value', 
+
+right(customername,len(customername)-1) 'Right Value', 
+
+concat(Upper(left(customername,1)), 
+
+lower(right(customername,len(customername)-1))) 'Name', 
+
+substring(country,1,3) 'Country', 
+
+reverse(country) 'Reverse',replace(country,'a','e') 'Replace' 
+
+from customers; 
+
+ 
+
+ 
+
+-- Date time Functions  
+
+  
+
+select getdate() 'Date',SYSDATETIME() 'System Date Time', 
+
+SYSUTCDATETIME (),GETUTCDATE(),CURRENT_TIMESTAMP; 
+
+  
+
+select convert(date,getdate()) 'Date', 
+
+convert(date,SYSDATETIME()) 'System Date Time', 
+
+convert(time,SYSUTCDATETIME ()), 
+
+convert(time,GETUTCDATE()), 
+
+convert(date,CURRENT_TIMESTAMP); 
+
+  
+
+select CURRENT_TIMESTAMP; 
+
+  
+
+select datepart(dd,getdate())'Day',datepart(M,getdate())'Month', 
+
+datepart(YY,getdate()) 'Year',datepart(YYYY,getdate()) 'Year', 
+
+datepart(dw,getdate()) 'Week day',datepart(DY,getdate()) 'Day of Year', 
+
+datepart(WEEK,getdate()) 'Week',datepart(HH,getdate())'Hour', 
+
+datepart(N,getdate()) 'Minute',datepart(ss,getdate()) 'Seconds'; 
+
+  
+
+select datename(dw,getdate()) 'Week day',datename(Month,getdate()) 
+
+'Month name' 
+
+  
+
+select * from orders; 
+
+  
+
+select ordernumber 'Order Id',orderdate 'Order Date', 
+
+datename(dw,orderdate) 'Day name',datename(mm,orderdate) 
+
+'Month name' from orders where datename(mm,orderdate)='October' 
+
+and datename(dw,orderdate)='Friday'; 
+
+  
+
+select datename(mm,orderdate) 
+
+'Month name',count(ordernumber) 'No of orders' 
+
+from orders group by datename(mm,orderdate); 
+
+  
+
+select datename(mm,orderdate) 
+
+'Month name',count(ordernumber) 'No of orders' 
+
+from orders group by datename(mm,orderdate) 
+
+having count(ordernumber) > 5; 
+
+ 
+
+  
+
+select datediff(yy,'2019/05/20',getdate()) 'Age'; 
+
+  
+
+select dateadd(dd,10,getdate()) 'After 10 days'; 
+
+ 
+
+-- JOINS : 
+
+/* 
+
+=> Combining two or more table to retrieve the data  
+
+=> It is must to have one common column in between the tables 
+
+=>Types of Joins : 
+
+=>Inner Join / Equivalent Join 
+
+=> It will retrieve the equivalent data from multiple  
+
+tables  
+
+Deptid Deptname 
+
+D01 Healthcare 
+
+D02 MMT 
+
+D03 Admin 
+
+Empid Empname Deptid 
+
+E101 Anu D01 
+
+E102 Ram D01 
+
+E103 Sita D02 
+
+E104 Diya null 
+
+Empid Depname 
+
+E101 Healthcare 
+
+E102 Healthcare 
+
+E103    MMT 
+
+SELECT empid,deptname from Employee E1 JOIN  
+
+Department D1 on D1.deptid=E1.deptid; 
+
+=>Outer Join 
+
+=>To retrieve both equivalent and non equivalent values 
+
+=>Non equivalent data will return as NULL 
+
+=>Left Outer 
+
+It will fetch all the data from left hand side 
+
+table and in right side equivalent values will  
+
+fetched and non equivalent values will be 
+
+represented as NULL 
+
+Empid Deptname 
+
+E101 Healthcare 
+
+E102 Healthcare 
+
+E103 MMT 
+
+E104 NULL 
+
+SELECT empid,deptname from Employee E1 LEFT JOIN  
+
+Department D1 on D1.deptid=E1.deptid; 
+
+=>Right Outer 
+
+It will fetch all the data from right hand side 
+
+table and in left side equivalent values will  
+
+fetched and non equivalent values will be 
+
+represented as NULL 
+
+Empid Deptname 
+
+E101 Healthcare 
+
+E102 Healthcare 
+
+E103 MMT 
+
+NULL    Admin 
+
+SELECT empid,deptname from Employee E1 Right JOIN  
+
+Department D1 on D1.deptid=E1.deptid; 
+
+=>Full JOIN 
+
+=>It is a combination of left and right 
+
+Empid Deptname 
+
+E101 Healthcare 
+
+E102 Healthcare 
+
+E103 MMT 
+
+E104 NULL 
+
+NULL Admin 
+
+SELECT empid,deptname from Employee E1 FULL JOIN  
+
+Department D1 on D1.deptid=E1.deptid; 
+
+=>Self Join 
+
+=>Joining the table by itself 
+
+Empid Empname ManagerID 
+
+E101 Anu NULL 
+
+E102 Ram E101 
+
+E103 Priya E101 
+
+E104 Diya E102 
+
+E105 Dev E103 
+
+  
+
+Empname Manager 
+
+Ram Anu 
+
+Priya Anu 
+
+Diya Ram 
+
+Dev Priya 
+
+  
+
+select E1.empname 'Empname',E2.empname 'Manager' 
+
+from Employee E1 JOIN Employee E2 on  
+
+E1.managerid=E2.empid; 
+
+  
+
+=>Cross Join 
+
+=>Cartesian join  
+
+Empid Deptname 
+
+E101 Healthcare 
+
+E102 Healthcare 
+
+E103 Healtcare 
+
+E104 Healthcare 
+
+E101 MMT 
+
+E102 MMT 
+
+E103 MMT 
+
+E104 MMT 
+
+E101 Admin 
+
+E102 Admin 
+
+E103 Admin 
+
+E104 Admin 
+
+E101 NULL 
+
+E102 NULL 
+
+E103 NULL 
+
+E104 NULL 
+
+  
+
+SELECT empid,deptname from Employee CROSS JOIN 
+
+department; 
+
+*/ 
+
+ 
+
+  
+
+select * from orders; 
+
+select * from customers; 
+
+  
+
+select c1.customernumber 'Cust Id',customerName 'Cust Name', 
+
+concat(contactfirstname,' ',contactLastName) 'Contact Name', 
+
+country 'Country',orderdate 'Order Date', 
+
+requiredDate 'Delivered Date',status 'Status' 
+
+from customers c1 join orders o1  
+
+on c1.customerNumber=o1.customerNumber; 
+
+  
+
+select c1.customernumber 'Cust Id',customerName 'Cust Name', 
+
+concat(contactfirstname,' ',contactLastName) 'Contact Name', 
+
+country 'Country',orderdate 'Order Date', 
+
+requiredDate 'Delivered Date',status 'Status' 
+
+from customers c1 join orders o1  
+
+on c1.customerNumber=o1.customerNumber 
+
+where country in('USA','UK','France') and  
+
+month(orderdate)=8; 
+
+  
+
+select country 'Country',count(o1.customernumber) 'No of orders' 
+
+from customers c1 join orders o1  
+
+on c1.customerNumber=o1.customerNumber 
+
+group by country; 
+
+  
+
+select country 'Country',count(o1.customernumber) 'No of orders' 
+
+from customers c1 join orders o1  
+
+on c1.customerNumber=o1.customerNumber 
+
+group by country having count(ordernumber) > 5; 
+
+ 
+
+  
+
+select * from orders; 
+
+select * from customers; 
+
+  
+
+select c1.customernumber 'Cust Id',customerName 'Cust Name', 
+
+concat(contactfirstname,' ',contactLastName) 'Contact Name', 
+
+country 'Country',orderdate 'Order Date', 
+
+requiredDate 'Delivered Date',status 'Status' 
+
+from customers c1 LEFT join orders o1  
+
+on c1.customerNumber=o1.customerNumber; 
+
+  
+
+  
+
+select c1.customernumber 'Cust Id',customerName 'Cust Name', 
+
+concat(contactfirstname,' ',contactLastName) 'Contact Name', 
+
+country 'Country',orderdate 'Order Date', 
+
+requiredDate 'Delivered Date',status 'Status' 
+
+from orders o1 right join  customers c1 
+
+on c1.customerNumber=o1.customerNumber; 
+
+  
+
+  
+
+select c1.customernumber 'Cust Id',customerName 'Cust Name', 
+
+concat(contactfirstname,' ',contactLastName) 'Contact Name', 
+
+country 'Country',orderdate 'Order Date', 
+
+requiredDate 'Delivered Date',status 'Status' 
+
+from customers c1 FULL join orders o1  
+
+on c1.customerNumber=o1.customerNumber; 
+
+  
+
+ select * from employees; 
+
+  
+
+select concat(e1.firstname,' ',e1.lastname) 'Employee Name', 
+
+e1.jobTitle 'Employee Designation', 
+
+concat(e2.firstname,' ',e2.lastName) 'Manager Name', 
+
+e2.jobTitle 'Manager Designation' 
+
+from employees E1 JOIN employees E2  
+
+on E1.reportsTo=E2.employeeNumber; 
+
+ 
+
+select * from customers cross join orders; 
+
+ 
+
+select customerName, contactFirstName 'Name', 
+
+country,creditLimit 'Credit Limit', 
+
+orderNumber 'Order id',orderdate 'Order Date', 
+
+status 'Status',concat(firstname,' ',lastname)'Employee Name', 
+
+jobtitle 'Designation' 
+
+from customers c1 join employees e1 on 
+
+e1.employeeNumber=c1.salesRepEmployeeNumber join 
+
+orders o1 on c1.customerNumber=o1.customerNumber; 
+
+  
+
+select customerName, contactFirstName 'Name', 
+
+country,creditLimit 'Credit Limit', 
+
+orderNumber 'Order id',orderdate 'Order Date', 
+
+status 'Status',concat(firstname,' ',lastname)'Employee Name', 
+
+jobtitle 'Designation' 
+
+from customers c1 join employees e1 on 
+
+e1.employeeNumber=c1.salesRepEmployeeNumber join 
+
+orders o1 on c1.customerNumber=o1.customerNumber 
+
+where country not in('USA','UK'); 
+
+  
+
+  
+
+select concat(firstname,' ',lastname)'Employee Name', 
+
+count(ordernumber)'No of orders' 
+
+from customers c1 join employees e1 on 
+
+e1.employeeNumber=c1.salesRepEmployeeNumber join 
+
+orders o1 on c1.customerNumber=o1.customerNumber 
+
+group by concat(firstname,' ',lastname); 
+
+  
+
+select concat(firstname,' ',lastname)'Employee Name', 
+
+count(ordernumber)'No of orders' 
+
+from customers c1 join employees e1 on 
+
+e1.employeeNumber=c1.salesRepEmployeeNumber join 
+
+orders o1 on c1.customerNumber=o1.customerNumber 
+
+group by concat(firstname,' ',lastname) having  
+
+count(ordernumber) > 5; 
+
+  
+
+select customerName, contactFirstName 'Name', 
+
+country,creditLimit 'Credit Limit', 
+
+orderNumber 'Order id',orderdate 'Order Date', 
+
+status 'Status',concat(firstname,' ',lastname)'Employee Name', 
+
+jobtitle 'Designation' 
+
+from customers c1 left join employees e1 on 
+
+e1.employeeNumber=c1.salesRepEmployeeNumber left join 
+
+orders o1 on c1.customerNumber=o1.customerNumber; 
+
+----------------------------------------------------------------------------------------------- 
+
+Sub Query : 
+
+---------------- 
+
+=> Query within a query – Nested Query 
+
+=> SELECT * from Employee where deptid in 
+
+(select deptid from department where deptname='Healthcare'); 
+
+ 
+
+=> in,not in,=,>,<,>=,<=,!=,ALL,ANY,SOME,exists 
+
+=>Correlated SubQuery 
+
+Inner query depends on outer query and outer query depends on inner query 
+
+SELECT Empname,(select deptname from department where deptid=E1.deptid) 
+
+'Department Nmae' from Employee E1; 
+
+=>Non Correlated SubQuery :  
+
+Inner query and outer query is not dependent  
+
+  
+
+  
+
+select concat(firstname,' ',lastname) 'Employee Name', 
+
+jobtitle 'Designation',city 'City',country 'Country' 
+
+from Employees E1 JOIN offices O1  
+
+on O1.officeCode=E1.officecode where employeeNumber in 
+
+(select distinct salesrepemployeenumber from customers); 
+
+  
+
+  
+
+select concat(firstname,' ',lastname) 'Employee Name', 
+
+jobtitle 'Designation',(select country from offices where 
+
+officeCode=E1.officeCode) 'Country' from Employees E1; 
+
+  
+
+select concat(firstname,' ',lastname) 'Employee Name', 
+
+jobtitle 'Designation',city 'City',country 'Country', 
+
+(select concat(firstname,' ',lastname) from Employees  
+
+where employeeNumber=E1.reportsTo) 'Manager Name' 
+
+from Employees E1 JOIN offices O1  
+
+on O1.officeCode=E1.officecode where employeeNumber in 
+
+(select distinct salesrepemployeenumber from customers); 
+
+  
+
+select concat(firstname,' ',lastname) 'Employee Name', 
+
+jobtitle 'Designation' 
+
+from Employees where employeeNumber not in 
+
+(select distinct salesrepemployeenumber from customers); 
+
+ 
+
+Derived Table : 
+
+=> Dynamic table – During run time table will get created  
+
+select top 5 * from employees; 
+
+  
+
+select creditlimit from customers order by creditlimit desc; 
+
+--1st Maximum 
+
+select distinct max(creditlimit) from customers; 
+
+-- 2nd Maximum 
+
+select max(creditlimit) 'Credit' from customers where  
+
+creditLimit !=(select max(creditlimit) from customers); 
+
+-- 3rd Maximum 
+
+select top 1 credit from 
+
+(select distinct top 3 creditlimit 'credit' from customers order by 
+
+creditlimit desc) X1 order by credit; 
+
+  
+
+--5th Maximum 
+
+select top 1 credit from 
+
+(select distinct top 5 creditlimit 'credit' from customers order by 
+
+creditlimit desc) X1 order by credit; 
+
+----------------------------------------------------------------------------------------------------- 
+
+Stored Procedure : 
+
+----------------------------- 
+
+=> Group of statement o 
+
+=>Compile once and execute for n number of times  
+
+create procedure selectdata 
+
+as 
+
+select concat(firstname,' ',lastname) 'Employee Name', 
+
+jobtitle 'Designation',city 'City',country 'Country' 
+
+from employees E1 Join offices O1 on 
+
+O1.officeCode=E1.officeCode; 
+
+  
+
+alter procedure selectdata 
+
+as 
+
+select concat(firstname,' ',lastname) 'Employee Name', 
+
+jobtitle 'Designation',city 'City',country 'Country' 
+
+from employees E1 Join offices O1 on 
+
+O1.officeCode=E1.officeCode order by country; 
+
+  
+
+execute selectdata; 
+
+  
+
+create proc insertdata (@empid int,@empfname varchar(100), 
+
+@emplname varchar(100),@extension varchar(10), 
+
+@mailid varchar(100),@officecode varchar(10),@reportsto int, 
+
+@jobtitle varchar(100)) 
+
+as 
+
+insert into Employees(employeeNumber,firstName,lastName, 
+
+extension,email,officeCode,reportsTo,jobTitle) values 
+
+(@empid,@empfname,@emplname,@extension,@mailid, 
+
+@officecode,@reportsto,@jobtitle); 
+
+  
+
+exec insertdata 2500,'Anu','Priya',x1010,'anu@hcl.com','7', 
+
+1002,'Analyst'; 
+
+  
+
+select * from Employees; 
+
+  
+
+create proc updatedata(@officecode varchar(10),@empid varchar(10)) 
+
+as 
+
+update employees set officeCode=@officecode where  
+
+employeeNumber=@empid 
+
+exec updatedata 5,2500; 
+
+create proc deletedata(@empid varchar(10)) 
+
+as 
+
+delete from employees where employeeNumber=@empid; 
+
+Exec deletedata 2500; 
